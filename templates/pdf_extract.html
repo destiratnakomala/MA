@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mahkamah Agung: NER & Summarization of Legal Documents</title>
+    <style>
+        .text-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            height: 200px;
+            overflow-y: auto; 
+            white-space: pre-wrap; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload PDFs, Search, Extract Text, and Summarize</h1>
+
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Upload PDF</button>
+    </form>
+
+    <form action="/" method="get">
+        <input type="text" name="search_query" placeholder="Search for a PDF..." value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>PDFs:</h2>
+    {{ pdf_table|safe }}  <!-- Render the DataFrame as an HTML table -->
+
+    <h2>Extracted Text:</h2>
+    {% if filtered_pdfs %}
+        <form action="/" method="get">
+            <select name="selected_pdf">
+                {% for pdf in filtered_pdfs %}
+                    <option value="{{ pdf }}">{{ pdf }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Extract Text</button>
+        </form>
+    {% endif %}
+
+    {% if extracted_text %}
+        <div class="text-box">  <!-- Styled box for text extraction -->
+            {{ extracted_text }}
+        </div>
+    {% endif %}
+
+    <h2>Summarized Data:</h2>
+    {% if summary_result %}
+        <div class="text-box">  <!-- Styled box for summarization result -->
+            {{ summary_result|safe }}  <!-- Render the HTML table with summarization data -->
+        </div>
+    {% else %}
+        <p>No summary result available.</p>
+    {% endif %}
+</body>
+</html>
